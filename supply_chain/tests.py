@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
-from supply_chain.models import ChainNode, Product, ChainNode
+from supply_chain.models import ChainNode, Product
 from users.models import User
 
 
@@ -44,7 +44,7 @@ class BaseTestCase(APITestCase):
         )
 
         self.retail_chain = ChainNode.objects.create(
-            name="retail 1'",
+            name="retail 1",
             level=1,
             email="retail@mail.ru",
             country="Россия",
@@ -120,7 +120,7 @@ class SupplierViewSetTest(BaseTestCase):
         """Тест получения списка звеньев сети анонимным пользователем"""
         url = reverse("supplier-list")
         response = self.anonymous_client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_retrieve_supplier(self):
         """Тест получения детальной информации о звене сети"""
@@ -237,7 +237,7 @@ class ProductViewSetTest(BaseTestCase):
         """Тест получения списка продуктов анонимным пользователем"""
         url = reverse("product-list")
         response = self.anonymous_client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_create_product(self):
         """Тест создания нового продукта"""
@@ -298,4 +298,3 @@ class ProductViewSetTest(BaseTestCase):
         url = reverse("product-list") + "?ordering=release_date"
         response = self.active_client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-

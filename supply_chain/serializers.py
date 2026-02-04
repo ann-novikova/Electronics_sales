@@ -2,10 +2,13 @@ from rest_framework import serializers
 
 from supply_chain.models import ChainNode, Product
 
+
 class ProductSerializer(serializers.ModelSerializer):
+    """Сериализатор для товара"""
+
     class Meta:
         model = Product
-        fields = ['id', 'name', 'model', 'release_date', 'chain_node']
+        fields = ["id", "name", "model", "release_date", "chain_node"]
 
 
 class ChainNodeSerializer(serializers.ModelSerializer):
@@ -42,8 +45,8 @@ class ChainNodeSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         # Запрет на обновление поля debt_to_supplier через API (как требование).
-        if 'debt' in validated_data:
-            validated_data.pop('debt')
+        if "debt" in validated_data:
+            validated_data.pop("debt")
         return super().update(instance, validated_data)
 
     def validate(self, data):
@@ -74,4 +77,3 @@ class ChainNodeSerializer(serializers.ModelSerializer):
                 current = current.supplier
 
         return data
-

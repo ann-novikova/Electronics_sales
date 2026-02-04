@@ -1,22 +1,30 @@
-from rest_framework import viewsets
-from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, viewsets
+
+from users.permissions import IsActiveStaff
+
 from .models import ChainNode, Product
 from .serializers import ChainNodeSerializer, ProductSerializer
-from users.permissions import IsActiveStaff
+
 
 class SupplierViewSet(viewsets.ModelViewSet):
     """
     CRUD для модели поставщика (ChainNode).
     Обновление debt запрещено через сериализатор.
     """
+
     queryset = ChainNode.objects.all()
     serializer_class = ChainNodeSerializer
     permission_classes = [IsActiveStaff]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
     filterset_fields = ["country", "city", "level"]
-    search_fields = ['name', 'city', 'country']
+    search_fields = ["name", "city", "country"]
     ordering_fields = ["name", "city", "debt", "created_at"]
+
 
 class ProductViewSet(viewsets.ModelViewSet):
     """ViewSet для работы с продуктами"""

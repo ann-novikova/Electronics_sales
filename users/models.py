@@ -38,11 +38,6 @@ class User(AbstractUser):
     Вместо поля `username` используется `email` как уникальный идентификатор
     для аутентификации. Позволяет хранить дополнительную информацию о пользователе:
     телефон, город, аватар.
-
-    email (EmailField): Уникальный адрес электронной почты. Используется для входа.
-    phone (CharField): Номер телефона пользователя. Максимум 15 символов.
-    city (CharField): Город проживания пользователя. Максимум 50 символов.
-    avatar (ImageField): Аватар пользователя. Загружается в папку 'users/avatar'.
     """
 
     username = None
@@ -56,10 +51,16 @@ class User(AbstractUser):
         null=False,
     )
     phone = models.CharField(
-        max_length=15, verbose_name="Телефон", help_text="Введите номер телефона"
+        max_length=15,
+        verbose_name="Телефон",
+        blank=True,
+        null=True,
+        help_text="Введите номер телефона",
     )
-    city = models.CharField(max_length=50, verbose_name="Город")
-    avatar = models.ImageField(upload_to="users/avatar", verbose_name="Аватар")
+    city = models.CharField(max_length=50, blank=True, null=True, verbose_name="Город")
+    avatar = models.ImageField(
+        upload_to="users/avatar", blank=True, null=True, verbose_name="Аватар"
+    )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

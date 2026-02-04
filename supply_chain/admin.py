@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
+
 from .models import ChainNode, Product
+
 
 @admin.register(ChainNode)
 class NetworkNodeAdmin(admin.ModelAdmin):
@@ -12,12 +14,14 @@ class NetworkNodeAdmin(admin.ModelAdmin):
 
     def supplier_link(self, obj):
         if obj.supplier:
-            url = f"/admin/network/networknode/{obj.supplier.pk}/change/"
-            return format_html('{}', url, obj.supplier.name)
-        return '-'
+            return format_html(
+                '<a href="{}">{}</a>',
+                reverse("admin:supply_chain_chainnode_change", args=[obj.supplier.id]),
+                obj.supplier.name,
+            )
+        return "-"
 
-    supplier_link.short_description = 'Поставщик'
-
+    supplier_link.short_description = "Поставщик"
 
     def clear_debt(self, request, queryset):
         updated = queryset.update(debt=0)
@@ -25,8 +29,9 @@ class NetworkNodeAdmin(admin.ModelAdmin):
 
     clear_debt.short_description = "Очистить задолженность перед поставщиком"
 
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'model', 'chain_node', 'release_date')
-    list_filter = ('release_date',)
-    search_fields = ('name', 'model', 'chain_node__name')
+    list_display = ("name", "model", "chain_node", "release_date")
+    list_filter = ("release_date",)
+    search_fields = ("name", "model", "chain_node__name")

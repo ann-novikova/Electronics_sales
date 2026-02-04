@@ -2,6 +2,8 @@ from django.db import models  # noqa
 
 
 class ChainNode(models.Model):
+    """Модель для звена сети"""
+
     LEVEL_CHOICES = [
         (0, "Завод"),
         (1, "Розничная сеть"),
@@ -36,6 +38,8 @@ class ChainNode(models.Model):
 
 
 class Product(models.Model):
+    """Модель для товара"""
+
     name = models.CharField(max_length=255, verbose_name="Название")
     model = models.CharField(max_length=255, verbose_name="Модель")
     release_date = models.DateField(verbose_name="Дата выхода на рынок")
